@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Adapatadores;
+package Persistencia.RepositorioBeneficiario;
 
 import Adapatadores.exceptions.NonexistentEntityException;
 import java.io.Serializable;
@@ -11,8 +11,8 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import Persistencia.RepositorioBeneficiario.Beneficiario;
-import Persistencia.RepositorioBeneficiario.Direccion;
+import Persistencia.RepositorioBeneficiario.BeneficiarioRepo;
+import Persistencia.RepositorioBeneficiario.DireccionRepo;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -23,6 +23,10 @@ import javax.persistence.EntityManagerFactory;
  */
 public class DireccionJpaController implements Serializable {
 
+    static void InsertDireccion(DireccionRepo objDirRep) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public DireccionJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
@@ -32,12 +36,12 @@ public class DireccionJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Direccion direccion) {
+    public void create(DireccionRepo direccion) {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Beneficiario idBeneficiario = direccion.getIdBeneficiario();
+            BeneficiarioRepo idBeneficiario = direccion.getIdBeneficiario();
             if (idBeneficiario != null) {
                 idBeneficiario = em.getReference(idBeneficiario.getClass(), idBeneficiario.getIdBeneficiario());
                 direccion.setIdBeneficiario(idBeneficiario);
@@ -55,14 +59,14 @@ public class DireccionJpaController implements Serializable {
         }
     }
 
-    public void edit(Direccion direccion) throws NonexistentEntityException, Exception {
+    public void edit(DireccionRepo direccion) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Direccion persistentDireccion = em.find(Direccion.class, direccion.getIdDireccion());
-            Beneficiario idBeneficiarioOld = persistentDireccion.getIdBeneficiario();
-            Beneficiario idBeneficiarioNew = direccion.getIdBeneficiario();
+            DireccionRepo persistentDireccion = em.find(DireccionRepo.class, direccion.getIdDireccion());
+            BeneficiarioRepo idBeneficiarioOld = persistentDireccion.getIdBeneficiario();
+            BeneficiarioRepo idBeneficiarioNew = direccion.getIdBeneficiario();
             if (idBeneficiarioNew != null) {
                 idBeneficiarioNew = em.getReference(idBeneficiarioNew.getClass(), idBeneficiarioNew.getIdBeneficiario());
                 direccion.setIdBeneficiario(idBeneficiarioNew);
@@ -98,14 +102,14 @@ public class DireccionJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Direccion direccion;
+            DireccionRepo direccion;
             try {
-                direccion = em.getReference(Direccion.class, id);
+                direccion = em.getReference(DireccionRepo.class, id);
                 direccion.getIdDireccion();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The direccion with id " + id + " no longer exists.", enfe);
             }
-            Beneficiario idBeneficiario = direccion.getIdBeneficiario();
+            BeneficiarioRepo idBeneficiario = direccion.getIdBeneficiario();
             if (idBeneficiario != null) {
                 idBeneficiario.getDireccionCollection().remove(direccion);
                 idBeneficiario = em.merge(idBeneficiario);
@@ -119,19 +123,19 @@ public class DireccionJpaController implements Serializable {
         }
     }
 
-    public List<Direccion> findDireccionEntities() {
+    public List<DireccionRepo> findDireccionEntities() {
         return findDireccionEntities(true, -1, -1);
     }
 
-    public List<Direccion> findDireccionEntities(int maxResults, int firstResult) {
+    public List<DireccionRepo> findDireccionEntities(int maxResults, int firstResult) {
         return findDireccionEntities(false, maxResults, firstResult);
     }
 
-    private List<Direccion> findDireccionEntities(boolean all, int maxResults, int firstResult) {
+    private List<DireccionRepo> findDireccionEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Direccion.class));
+            cq.select(cq.from(DireccionRepo.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -143,10 +147,10 @@ public class DireccionJpaController implements Serializable {
         }
     }
 
-    public Direccion findDireccion(Integer id) {
+    public DireccionRepo findDireccion(Integer id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(Direccion.class, id);
+            return em.find(DireccionRepo.class, id);
         } finally {
             em.close();
         }
@@ -156,7 +160,7 @@ public class DireccionJpaController implements Serializable {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Direccion> rt = cq.from(Direccion.class);
+            Root<DireccionRepo> rt = cq.from(DireccionRepo.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();

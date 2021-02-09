@@ -3,17 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Adapatadores;
+package Persistencia.RepositorioBeneficiario;
 
 import Adapatadores.exceptions.IllegalOrphanException;
 import Adapatadores.exceptions.NonexistentEntityException;
-import Persistencia.RepositorioBeneficiario.Beneficiario;
+import Persistencia.RepositorioBeneficiario.BeneficiarioRepo;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import Persistencia.RepositorioBeneficiario.Direccion;
+import Persistencia.RepositorioBeneficiario.DireccionRepo;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -25,6 +30,46 @@ import javax.persistence.EntityManagerFactory;
  * @author Isra
  */
 public class BeneficiarioJpaController implements Serializable {
+public Connection con;
+ResultSet rs;
+PreparedStatement ps = null;
+public Connection getConnection () throws ClassNotFoundException, SQLException { 
+          String driver = "com.mysql.jdbc.Driver";
+          String url = "jdbc:mysql://localhost:3306/FoodCare";
+          //System.out.println("llego");
+          Class.forName(driver);
+          return DriverManager.getConnection(url,"root","");
+}
+public Connection OpenConection() throws ClassNotFoundException, SQLException{
+          con = getConnection();
+          return con;
+}
+public void CloseConection() throws SQLException{
+         con.close();
+}
+ 
+public boolean InsertBeneficiario(BeneficiarioRepo objBenRep) {
+      String sql = "INSERT INTO beneficiario (NombreApeliido, integrantes, celular)  "
+                + "VALUES (?,?,?)";
+        try {
+            ps = OpenConection().prepareStatement(sql);
+            ps.setString(1, objBenRep.getNombreApeliido());
+            ps.setString(2, String.valueOf(objBenRep.getIntegrantes()));
+            ps.setString(3, objBenRep.getCelular());
+            ps.execute();
+            System.out.println("exe beneficiario");
+            return true;
+        } catch (Exception e) {
+            System.err.println(e);
+            return false;
+        } finally {
+            try {
+                CloseConection();
+            } catch (SQLException e) {
+                System.err.println(3);
+            }
+        }
+    }
 
     public BeneficiarioJpaController(EntityManagerFactory emf) {
         this.emf = emf;
@@ -35,23 +80,23 @@ public class BeneficiarioJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Beneficiario beneficiario) {
+    public void create(BeneficiarioRepo beneficiario) {
         if (beneficiario.getDireccionCollection() == null) {
-            beneficiario.setDireccionCollection(new ArrayList<Direccion>());
+            beneficiario.setDireccionCollection(new ArrayList<DireccionRepo>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Collection<Direccion> attachedDireccionCollection = new ArrayList<Direccion>();
-            for (Direccion direccionCollectionDireccionToAttach : beneficiario.getDireccionCollection()) {
+            Collection<DireccionRepo> attachedDireccionCollection = new ArrayList<DireccionRepo>();
+            for (DireccionRepo direccionCollectionDireccionToAttach : beneficiario.getDireccionCollection()) {
                 direccionCollectionDireccionToAttach = em.getReference(direccionCollectionDireccionToAttach.getClass(), direccionCollectionDireccionToAttach.getIdDireccion());
                 attachedDireccionCollection.add(direccionCollectionDireccionToAttach);
             }
             beneficiario.setDireccionCollection(attachedDireccionCollection);
             em.persist(beneficiario);
-            for (Direccion direccionCollectionDireccion : beneficiario.getDireccionCollection()) {
-                Beneficiario oldIdBeneficiarioOfDireccionCollectionDireccion = direccionCollectionDireccion.getIdBeneficiario();
+            for (DireccionRepo direccionCollectionDireccion : beneficiario.getDireccionCollection()) {
+                BeneficiarioRepo oldIdBeneficiarioOfDireccionCollectionDireccion = direccionCollectionDireccion.getIdBeneficiario();
                 direccionCollectionDireccion.setIdBeneficiario(beneficiario);
                 direccionCollectionDireccion = em.merge(direccionCollectionDireccion);
                 if (oldIdBeneficiarioOfDireccionCollectionDireccion != null) {
@@ -67,16 +112,16 @@ public class BeneficiarioJpaController implements Serializable {
         }
     }
 
-    public void edit(Beneficiario beneficiario) throws IllegalOrphanException, NonexistentEntityException, Exception {
+    public void edit(BeneficiarioRepo beneficiario) throws IllegalOrphanException, NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Beneficiario persistentBeneficiario = em.find(Beneficiario.class, beneficiario.getIdBeneficiario());
-            Collection<Direccion> direccionCollectionOld = persistentBeneficiario.getDireccionCollection();
-            Collection<Direccion> direccionCollectionNew = beneficiario.getDireccionCollection();
+            BeneficiarioRepo persistentBeneficiario = em.find(BeneficiarioRepo.class, beneficiario.getIdBeneficiario());
+            Collection<DireccionRepo> direccionCollectionOld = persistentBeneficiario.getDireccionCollection();
+            Collection<DireccionRepo> direccionCollectionNew = beneficiario.getDireccionCollection();
             List<String> illegalOrphanMessages = null;
-            for (Direccion direccionCollectionOldDireccion : direccionCollectionOld) {
+            for (DireccionRepo direccionCollectionOldDireccion : direccionCollectionOld) {
                 if (!direccionCollectionNew.contains(direccionCollectionOldDireccion)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
@@ -87,17 +132,17 @@ public class BeneficiarioJpaController implements Serializable {
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            Collection<Direccion> attachedDireccionCollectionNew = new ArrayList<Direccion>();
-            for (Direccion direccionCollectionNewDireccionToAttach : direccionCollectionNew) {
+            Collection<DireccionRepo> attachedDireccionCollectionNew = new ArrayList<DireccionRepo>();
+            for (DireccionRepo direccionCollectionNewDireccionToAttach : direccionCollectionNew) {
                 direccionCollectionNewDireccionToAttach = em.getReference(direccionCollectionNewDireccionToAttach.getClass(), direccionCollectionNewDireccionToAttach.getIdDireccion());
                 attachedDireccionCollectionNew.add(direccionCollectionNewDireccionToAttach);
             }
             direccionCollectionNew = attachedDireccionCollectionNew;
             beneficiario.setDireccionCollection(direccionCollectionNew);
             beneficiario = em.merge(beneficiario);
-            for (Direccion direccionCollectionNewDireccion : direccionCollectionNew) {
+            for (DireccionRepo direccionCollectionNewDireccion : direccionCollectionNew) {
                 if (!direccionCollectionOld.contains(direccionCollectionNewDireccion)) {
-                    Beneficiario oldIdBeneficiarioOfDireccionCollectionNewDireccion = direccionCollectionNewDireccion.getIdBeneficiario();
+                    BeneficiarioRepo oldIdBeneficiarioOfDireccionCollectionNewDireccion = direccionCollectionNewDireccion.getIdBeneficiario();
                     direccionCollectionNewDireccion.setIdBeneficiario(beneficiario);
                     direccionCollectionNewDireccion = em.merge(direccionCollectionNewDireccion);
                     if (oldIdBeneficiarioOfDireccionCollectionNewDireccion != null && !oldIdBeneficiarioOfDireccionCollectionNewDireccion.equals(beneficiario)) {
@@ -128,16 +173,16 @@ public class BeneficiarioJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Beneficiario beneficiario;
+            BeneficiarioRepo beneficiario;
             try {
-                beneficiario = em.getReference(Beneficiario.class, id);
+                beneficiario = em.getReference(BeneficiarioRepo.class, id);
                 beneficiario.getIdBeneficiario();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The beneficiario with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            Collection<Direccion> direccionCollectionOrphanCheck = beneficiario.getDireccionCollection();
-            for (Direccion direccionCollectionOrphanCheckDireccion : direccionCollectionOrphanCheck) {
+            Collection<DireccionRepo> direccionCollectionOrphanCheck = beneficiario.getDireccionCollection();
+            for (DireccionRepo direccionCollectionOrphanCheckDireccion : direccionCollectionOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
@@ -155,19 +200,19 @@ public class BeneficiarioJpaController implements Serializable {
         }
     }
 
-    public List<Beneficiario> findBeneficiarioEntities() {
+    public List<BeneficiarioRepo> findBeneficiarioEntities() {
         return findBeneficiarioEntities(true, -1, -1);
     }
 
-    public List<Beneficiario> findBeneficiarioEntities(int maxResults, int firstResult) {
+    public List<BeneficiarioRepo> findBeneficiarioEntities(int maxResults, int firstResult) {
         return findBeneficiarioEntities(false, maxResults, firstResult);
     }
 
-    private List<Beneficiario> findBeneficiarioEntities(boolean all, int maxResults, int firstResult) {
+    private List<BeneficiarioRepo> findBeneficiarioEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Beneficiario.class));
+            cq.select(cq.from(BeneficiarioRepo.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -179,10 +224,10 @@ public class BeneficiarioJpaController implements Serializable {
         }
     }
 
-    public Beneficiario findBeneficiario(Integer id) {
+    public BeneficiarioRepo findBeneficiario(Integer id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(Beneficiario.class, id);
+            return em.find(BeneficiarioRepo.class, id);
         } finally {
             em.close();
         }
@@ -192,7 +237,7 @@ public class BeneficiarioJpaController implements Serializable {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Beneficiario> rt = cq.from(Beneficiario.class);
+            Root<BeneficiarioRepo> rt = cq.from(BeneficiarioRepo.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();

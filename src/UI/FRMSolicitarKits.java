@@ -5,6 +5,15 @@
  */
 package UI;
 
+import Adapatadores.SolicitudPortInt;
+import Domain.Entities.Beneficiario;
+import Domain.Entities.Direccion;
+import Domain.UseCase.SolicitarKit;
+import Persistencia.RepositorioBeneficiario.BeneficiarioRepo;
+
+import Persistencia.RepositorioBeneficiario.RepositorioBeneficiario;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Isra
@@ -52,7 +61,7 @@ public class FRMSolicitarKits extends javax.swing.JFrame {
         cbxSector = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtARef = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
+        btnSolicitar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -115,11 +124,11 @@ public class FRMSolicitarKits extends javax.swing.JFrame {
         txtARef.setRows(5);
         jScrollPane1.setViewportView(txtARef);
 
-        jButton1.setBackground(new java.awt.Color(112, 172, 99));
-        jButton1.setText("Solicitar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnSolicitar.setBackground(new java.awt.Color(112, 172, 99));
+        btnSolicitar.setText("Solicitar");
+        btnSolicitar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnSolicitarActionPerformed(evt);
             }
         });
 
@@ -175,7 +184,7 @@ public class FRMSolicitarKits extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(198, 198, 198)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnSolicitar, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -226,7 +235,7 @@ public class FRMSolicitarKits extends javax.swing.JFrame {
                             .addComponent(txtCalleS, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jScrollPane1))
                 .addGap(18, 18, 18)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnSolicitar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(26, Short.MAX_VALUE))
         );
 
@@ -254,9 +263,33 @@ public class FRMSolicitarKits extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void btnSolicitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSolicitarActionPerformed
+        String Nombre,celular,sector, barrio, calleP, calleS,referencia;
+        int integrantes;
+        
+        Nombre= this.txtNombre.getText();
+        celular = this.txtCelular.getText();
+        sector = String.valueOf(this.cbxSector.getSelectedItem());
+        barrio = this.txtBarrio.getText();
+        calleP= this.txtCalleP.getText();
+        calleS= this.txtCalleS.getText();
+        referencia = this.txtARef.getText();
+        integrantes = Integer.parseInt(this.spIntegrantes.getValue().toString());
+
+        Direccion objDireccion = new Direccion(sector,barrio,calleP,calleS,referencia);
+        Beneficiario objBen = new Beneficiario(Nombre,integrantes,celular,objDireccion);
+        BeneficiarioRepo objBenRepo = new BeneficiarioRepo(0,Nombre,integrantes,celular);
+        
+        RepositorioBeneficiario objRepBen = new RepositorioBeneficiario(); 
+        SolicitudPortInt objSolPort = new SolicitudPortInt(
+        new SolicitarKit(objRepBen),objRepBen);
+        
+        objRepBen.insertarBeneficiario(objBen);
+        System.out.println(objBen);
+        objSolPort.SolicitarPortInt(objBen);
+        System.out.println("pasa");
+
+    }//GEN-LAST:event_btnSolicitarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -295,8 +328,8 @@ public class FRMSolicitarKits extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnSolicitar;
     private javax.swing.JComboBox<String> cbxSector;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

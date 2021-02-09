@@ -9,19 +9,15 @@ public class Beneficiario {
     public int numeroIntegrantes;
     public String celular;
     public Direccion direccion;
-    public kit kit;
-    Direccion objDireccion ;
 
     public Beneficiario() {
     }
 
-    public Beneficiario(String nombreApellidos, int numeroIntegrantes, String celular, Direccion direccion, kit kit, Direccion objDireccion) {
+    public Beneficiario(String nombreApellidos, int numeroIntegrantes, String celular, Direccion direccion) {
         this.nombreApellidos = nombreApellidos;
         this.numeroIntegrantes = numeroIntegrantes;
         this.celular = celular;
         this.direccion = direccion;
-        this.kit = kit;
-        this.objDireccion = objDireccion;
     }
 
     public String getNombreApellidos() {
@@ -56,25 +52,10 @@ public class Beneficiario {
         this.direccion = direccion;
     }
 
-    public kit getKit() {
-        return kit;
-    }
-
-    public void setKit(kit kit) {
-        this.kit = kit;
-    }
-
-    public Direccion getObjDireccion() {
-        return objDireccion;
-    }
-
-    public void setObjDireccion(Direccion objDireccion) {
-        this.objDireccion = objDireccion;
-    }
 
     @Override
     public String toString() {
-        return "Beneficiario{" + "nombreApellidos=" + nombreApellidos + ", numeroIntegrantes=" + numeroIntegrantes + ", celular=" + celular + ", direccion=" + direccion + ", kit=" + kit + ", objDireccion=" + objDireccion + '}';
+        return "Beneficiario{" + "nombreApellidos=" + nombreApellidos + ", numeroIntegrantes=" + numeroIntegrantes + ", celular=" + celular + ", direccion=" + direccion + '}';
     }
     
     

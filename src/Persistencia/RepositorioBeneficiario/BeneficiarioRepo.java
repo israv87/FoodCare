@@ -34,9 +34,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Beneficiario.findByNombreApeliido", query = "SELECT b FROM Beneficiario b WHERE b.nombreApeliido = :nombreApeliido"),
     @NamedQuery(name = "Beneficiario.findByIntegrantes", query = "SELECT b FROM Beneficiario b WHERE b.integrantes = :integrantes"),
     @NamedQuery(name = "Beneficiario.findByCelular", query = "SELECT b FROM Beneficiario b WHERE b.celular = :celular")})
-public class Beneficiario implements Serializable {
+public class BeneficiarioRepo implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private  final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -50,18 +50,18 @@ public class Beneficiario implements Serializable {
     private int integrantes;
     @Basic(optional = false)
     @Column(name = "celular")
-    private int celular;
+    private String celular;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idBeneficiario")
-    private Collection<Direccion> direccionCollection;
+    private Collection<DireccionRepo> direccionCollection;
 
-    public Beneficiario() {
+    public BeneficiarioRepo() {
     }
 
-    public Beneficiario(Integer idBeneficiario) {
+    public BeneficiarioRepo(Integer idBeneficiario) {
         this.idBeneficiario = idBeneficiario;
     }
 
-    public Beneficiario(Integer idBeneficiario, String nombreApeliido, int integrantes, int celular) {
+    public BeneficiarioRepo(Integer idBeneficiario, String nombreApeliido, int integrantes, String celular) {
         this.idBeneficiario = idBeneficiario;
         this.nombreApeliido = nombreApeliido;
         this.integrantes = integrantes;
@@ -92,20 +92,20 @@ public class Beneficiario implements Serializable {
         this.integrantes = integrantes;
     }
 
-    public int getCelular() {
+    public String getCelular() {
         return celular;
     }
 
-    public void setCelular(int celular) {
+    public void setCelular(String celular) {
         this.celular = celular;
     }
 
     @XmlTransient
-    public Collection<Direccion> getDireccionCollection() {
+    public Collection<DireccionRepo> getDireccionCollection() {
         return direccionCollection;
     }
 
-    public void setDireccionCollection(Collection<Direccion> direccionCollection) {
+    public void setDireccionCollection(Collection<DireccionRepo> direccionCollection) {
         this.direccionCollection = direccionCollection;
     }
 
@@ -119,10 +119,10 @@ public class Beneficiario implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Beneficiario)) {
+        if (!(object instanceof BeneficiarioRepo)) {
             return false;
         }
-        Beneficiario other = (Beneficiario) object;
+        BeneficiarioRepo other = (BeneficiarioRepo) object;
         if ((this.idBeneficiario == null && other.idBeneficiario != null) || (this.idBeneficiario != null && !this.idBeneficiario.equals(other.idBeneficiario))) {
             return false;
         }

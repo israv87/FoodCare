@@ -5,6 +5,6 @@ import Domain.Entities.Beneficiario;
 
 public interface ISolicitar {
 
-    void registrar(final Beneficiario beneficiario);
-
+    public int registrar(final Beneficiario beneficiario);
+    
 }

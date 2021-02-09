@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Direccion.findByCalleP", query = "SELECT d FROM Direccion d WHERE d.calleP = :calleP"),
     @NamedQuery(name = "Direccion.findByCalleS", query = "SELECT d FROM Direccion d WHERE d.calleS = :calleS"),
     @NamedQuery(name = "Direccion.findByReferencia", query = "SELECT d FROM Direccion d WHERE d.referencia = :referencia")})
-public class Direccion implements Serializable {
+public class DireccionRepo implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -54,12 +54,13 @@ public class Direccion implements Serializable {
     private String referencia;
     @JoinColumn(name = "idBeneficiario", referencedColumnName = "idBeneficiario")
     @ManyToOne(optional = false)
-    private Beneficiario idBeneficiario;
+    private BeneficiarioRepo idBeneficiario;
 
-    public Direccion() {
+    
+    public DireccionRepo() {
     }
 
-    public Direccion(Integer idDireccion) {
+    public DireccionRepo(Integer idDireccion) {
         this.idDireccion = idDireccion;
     }
 
@@ -111,11 +112,11 @@ public class Direccion implements Serializable {
         this.referencia = referencia;
     }
 
-    public Beneficiario getIdBeneficiario() {
+    public BeneficiarioRepo getIdBeneficiario() {
         return idBeneficiario;
     }
 
-    public void setIdBeneficiario(Beneficiario idBeneficiario) {
+    public void setIdBeneficiario(BeneficiarioRepo idBeneficiario) {
         this.idBeneficiario = idBeneficiario;
     }
 
@@ -129,16 +130,17 @@ public class Direccion implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Direccion)) {
+        if (!(object instanceof DireccionRepo)) {
             return false;
         }
-        Direccion other = (Direccion) object;
+        DireccionRepo other = (DireccionRepo) object;
         if ((this.idDireccion == null && other.idDireccion != null) || (this.idDireccion != null && !this.idDireccion.equals(other.idDireccion))) {
             return false;
         }
         return true;
     }
-
+    
+    
     @Override
     public String toString() {
         return "Persistencia.RepositorioBeneficiario.Direccion[ idDireccion=" + idDireccion + " ]";
