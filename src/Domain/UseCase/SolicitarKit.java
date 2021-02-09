@@ -8,6 +8,7 @@ import Domain.ISolicitar;
 public class SolicitarKit implements ISolicitar {
 
     public void registrar(final Beneficiario beneficiario) {
+     
     }
 
 }
