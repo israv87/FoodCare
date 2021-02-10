@@ -1,4 +1,4 @@
-package Domain.Entities;
+package cleanarc.Domain.Entities;
 
 
 
@@ -7,13 +7,13 @@ public class Beneficiario {
 
     public String nombreApellidos;
     public int numeroIntegrantes;
-    public String celular;
+    public int celular;
     public Direccion direccion;
 
     public Beneficiario() {
     }
 
-    public Beneficiario(String nombreApellidos, int numeroIntegrantes, String celular, Direccion direccion) {
+    public Beneficiario(String nombreApellidos, int numeroIntegrantes, int celular, Direccion direccion) {
         this.nombreApellidos = nombreApellidos;
         this.numeroIntegrantes = numeroIntegrantes;
         this.celular = celular;
@@ -36,11 +36,11 @@ public class Beneficiario {
         this.numeroIntegrantes = numeroIntegrantes;
     }
 
-    public String getCelular() {
+    public int getCelular() {
         return celular;
     }
 
-    public void setCelular(String celular) {
+    public void setCelular(int celular) {
         this.celular = celular;
     }
 
@@ -62,6 +62,18 @@ public class Beneficiario {
     
     public void AgregarDireccion(final String sector, final String callePrincipal, final String calleSecundaria, final String barrio, final String referencia) {
     
+    }
+
+    public void setIdBeneficiario(int i) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void setIntegrantes(int numeroIntegrantes) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void setNombreApeliido(String nombreApellidos) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

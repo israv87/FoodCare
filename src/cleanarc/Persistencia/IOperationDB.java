@@ -1,9 +1,7 @@
-package Persistencia;
+package cleanarc.persistencia;
 
-import Domain.Entities.Beneficiario;
-import Domain.Entities.Direccion;
-import Persistencia.RepositorioBeneficiario.BeneficiarioRepo;
-
+import cleanarc.Domain.Entities.Beneficiario;
+import cleanarc.Domain.Entities.Direccion;
 
 
 public interface IOperationDB {
@@ -16,10 +14,7 @@ public interface IOperationDB {
 
     void actualizar();
 
-    public void insertar(BeneficiarioRepo objBenRep);
+    public int insertar(cleanarc.persistencia.Beneficiario objBeneficiario);
+   
 
-    public void InsertarBeneficiario(Beneficiario objBen);
-
-    public void InsertarDireccionBeneficiario(Direccion objDir);
-    
 }

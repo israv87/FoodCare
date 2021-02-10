@@ -1,4 +1,4 @@
-package Domain.Entities;
+package cleanarc.Domain.Entities;
 
 public class kit {
 

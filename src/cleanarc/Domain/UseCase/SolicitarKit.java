@@ -1,10 +1,9 @@
-package Domain.UseCase;
+package cleanarc.Domain.Usecase;
 
-import Domain.Entities.Beneficiario;
-import Domain.Entities.Direccion;
-import Domain.ISolicitar;
-import Persistencia.IOperationDB;
-import Persistencia.RepositorioBeneficiario.BeneficiarioRepo;
+import cleanarc.Domain.Entities.Beneficiario;
+import cleanarc.Domain.Entities.Direccion;
+import cleanarc.Domain.ISolicitar;
+import cleanarc.persistencia.IOperationDB;
 
 
 
@@ -18,31 +17,32 @@ public class SolicitarKit implements ISolicitar {
  
  
 
-    public void registrar(Beneficiario beneficiario,BeneficiarioRepo beneficiarioRepo) {
+    public void registrar(Beneficiario beneficiario,Beneficiario beneficiarioRepo) {
      Beneficiario objBen = new Beneficiario();
      Direccion objDir = new Direccion();
-     BeneficiarioRepo objBenRep = new BeneficiarioRepo(); 
+     cleanarc.persistencia.Beneficiario objBeneficiario = new cleanarc.persistencia.Beneficiario();
      
-     objBenRep.setNombreApeliido(objBen.getNombreApellidos());
-     objBenRep.setIntegrantes(objBen.getNumeroIntegrantes());
-     objBenRep.setCelular(objBen.getCelular());
-     objBenRep.setIdBeneficiario(1);
-     repository.insertar(objBenRep);
+     objBeneficiario.setNombreApeliido(objBen.getNombreApellidos());
+     objBeneficiario.setIntegrantes(objBen.getNumeroIntegrantes());
+     objBeneficiario.setCelular(objBen.getCelular());
+     objBeneficiario.setIdBeneficiario(1);
+     repository.insertar(objBeneficiario);
     }
 
     @Override
     public int registrar(Beneficiario beneficiario) {
         Beneficiario objBen = new Beneficiario();
      Direccion objDir = new Direccion();
-     BeneficiarioRepo objBenRep = new BeneficiarioRepo(); 
+     cleanarc.persistencia.Beneficiario objBeneficiario = new cleanarc.persistencia.Beneficiario();
      
-     objBenRep.setNombreApeliido(objBen.getNombreApellidos());
-     objBenRep.setIntegrantes(objBen.getNumeroIntegrantes());
-     objBenRep.setCelular(objBen.getCelular());
-     objBenRep.setIdBeneficiario(1);
-     repository.insertar(objBenRep);
+     objBeneficiario.setNombreApeliido(objBen.getNombreApellidos());
+     objBeneficiario.setIntegrantes(objBen.getNumeroIntegrantes());
+     objBeneficiario.setCelular(objBen.getCelular());
+     objBeneficiario.setIdBeneficiario(1);
+     repository.insertar(objBeneficiario);
      return 1;
     }
+
     
 
 }

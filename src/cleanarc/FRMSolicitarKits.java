@@ -3,15 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package UI;
+package cleanarc;
 
-import Adapatadores.SolicitudPortInt;
-import Domain.Entities.Beneficiario;
-import Domain.Entities.Direccion;
-import Domain.UseCase.SolicitarKit;
-import Persistencia.RepositorioBeneficiario.BeneficiarioRepo;
 
-import Persistencia.RepositorioBeneficiario.RepositorioBeneficiario;
+import cleanarc.Domain.Entities.Beneficiario;
+import cleanarc.Domain.Entities.Direccion;
+import cleanarc.Domain.Usecase.SolicitarKit;
+import cleanarc.adaptadores.SolicitudPortInt;
+import cleanarc.persistencia.RepositorioBeneficiario;
+
+
+
 import javax.swing.JOptionPane;
 
 /**
@@ -65,18 +67,32 @@ public class FRMSolicitarKits extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
         jLabel2.setFont(new java.awt.Font("Corbel", 1, 48)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Food Care");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 0, 260, 100));
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/logo.png"))); // NOI18N
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 0, -1, -1));
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cleanarc/imagenes/logo.png"))); // NOI18N
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/banner2.jpg.png"))); // NOI18N
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 590, -1));
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cleanarc/imagenes/banner2.jpg.png"))); // NOI18N
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(120, 120, 120)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(370, 370, 370)
+                .addComponent(jLabel3))
+            .addComponent(jLabel1)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jLabel3)
+            .addComponent(jLabel1)
+        );
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -264,11 +280,11 @@ public class FRMSolicitarKits extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSolicitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSolicitarActionPerformed
-        String Nombre,celular,sector, barrio, calleP, calleS,referencia;
-        int integrantes;
+        String Nombre,sector, barrio, calleP, calleS,referencia;
+        int integrantes,celular;
         
         Nombre= this.txtNombre.getText();
-        celular = this.txtCelular.getText();
+        celular = 0;
         sector = String.valueOf(this.cbxSector.getSelectedItem());
         barrio = this.txtBarrio.getText();
         calleP= this.txtCalleP.getText();
@@ -278,16 +294,15 @@ public class FRMSolicitarKits extends javax.swing.JFrame {
 
         Direccion objDireccion = new Direccion(sector,barrio,calleP,calleS,referencia);
         Beneficiario objBen = new Beneficiario(Nombre,integrantes,celular,objDireccion);
-        BeneficiarioRepo objBenRepo = new BeneficiarioRepo(0,Nombre,integrantes,celular);
+
         
         RepositorioBeneficiario objRepBen = new RepositorioBeneficiario(); 
         SolicitudPortInt objSolPort = new SolicitudPortInt(
         new SolicitarKit(objRepBen),objRepBen);
-        
-        objRepBen.insertarBeneficiario(objBen);
-        System.out.println(objBen);
         objSolPort.SolicitarPortInt(objBen);
-        System.out.println("pasa");
+   
+        
+
 
     }//GEN-LAST:event_btnSolicitarActionPerformed
 
@@ -316,6 +331,8 @@ public class FRMSolicitarKits extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(FRMSolicitarKits.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 

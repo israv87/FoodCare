@@ -1,9 +1,9 @@
-package Domain.UseCase;
+package cleanarc.Domain.Usecase;
 
 
-import Domain.Entities.Beneficiario;
-import Domain.Entities.kit;
-import Domain.IRegProductos;
+import cleanarc.Domain.Entities.Beneficiario;
+import cleanarc.Domain.Entities.kit;
+import cleanarc.Domain.IRegProductos;
 
 
 

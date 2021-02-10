@@ -1,7 +1,7 @@
-package Domain.UseCase;
+package cleanarc.Domain.Usecase;
 
-import Domain.Entities.Producto;
-import Domain.IRegKits;
+import cleanarc.Domain.Entities.Producto;
+import cleanarc.Domain.IRegKits;
 
 
 
